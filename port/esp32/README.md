@@ -11,7 +11,10 @@ git clone --recursive https://gitlab.iotivity.org/iotivity/iotivity-lite.git
 
 ### Ubuntu
 ```bash
-sudo apt install -y git wget flex bison gperf python3 python3-pip python3-setuptools python3-serial python3-click python3-cryptography python3-future python3-pyparsing python3-pyelftools cmake ninja-build ccache libffi-dev libssl-dev libusb-1.0-0
+sudo apt install -y git wget flex bison gperf python3 python3-pip python3-setuptools \
+ python3-serial python3-click python3-cryptography python3-future python3-pyparsing \
+ python3-pyelftools cmake ninja-build ccache libffi-dev libssl-dev libusb-1.0-0
+
 cd ./iotivity-lite/port/esp32
 git clone --recursive https://github.com/espressif/esp-idf.git 
 ./esp-idf/install.sh
@@ -44,7 +47,7 @@ Jump to the [common steps](#common-steps) below.
 
 ```bash
 idf.py set-target esp32
-idf.py menuconfig // set wifi (This will bring up a GUI where you need to set SSID and SSID password under the IoTivity menu item. Exit and save.)
+idf.py menuconfig // this will bring up a GUI where you need to set up wifi
 ( cd esp-idf/components/mbedtls/mbedtls && git am ../../../../patches/mbedtls/*.patch )
 ( cd esp-idf && find ../patches/esp-idf/ -type f -name '*.patch' -exec patch -p1 -i {} \; )
 ( cd esp-idf/components/lwip/lwip && find ../../../../patches/lwip/ -type f -name '*.patch' -exec patch -p1 -i {} \; )
@@ -55,13 +58,13 @@ idf.py -p (PORT) flash monitor
 - Note: When in monitor mode, you can use Ctrl + ] to break out (like Ctrl + C).
 
 ## Known issues
-
-- after own and onboard lot's of the heap is consumed (just 50KB are free). When the device was rebooted 130KB are free
-- partition nvs must be resize (extended) because storage store data to nvs
-- when cloud is enabled OC_DYNAMIC_ALLOCATION must be set because OC_COLLECTIONS is not supported without OC_DYNAMIC_ALLOCATION
-- max_app_data_size must be set to 6+KB(otherwise credentials are not stored to the storage) and less then 8KB(otherwise esp aborts - heap is exhausted during own and onboard)
+- after OCF ownership transfer and cloud onboard, only 50KB of heap is available; rebooting gives 130KB
+- partition nvs must be resized (extended) because the storage store the data to the nvs
+- when built with CLOUD=1, OC_DYNAMIC_ALLOCATION must be set as as well as OC_COLLECTIONS requires it
+- max_app_data_size must be set to 6+KB otherwise credentials are not stored to the storage
+- max_app_data_Size must be less then 8KB otherwise heap is exhausted during own and onboard
 - compiler performance optimalization(-O2) must be set otherwise heap is exhausted during own and onboard
-- set CONFIG_MBEDTLS_SSL_IN_CONTENT_LEN to same same size as max_app_data_size because we want to avoid exhaust heap and more is not used
+- to avoid exhausted heap, set CONFIG_MBEDTLS_SSL_IN_CONTENT_LEN to same same size as max_app_data_size
 
 ## Performance over heap memory
 
