@@ -26,11 +26,7 @@ oc_clock_init(void)
 }
 
 oc_clock_time_t
-oc_clock_time
-  (
-void
-)
-
+oc_clock_time(void)
 
 {
   oc_clock_time_t time = 0;

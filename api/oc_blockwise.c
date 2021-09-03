@@ -31,11 +31,9 @@ OC_LIST(oc_blockwise_requests);
 OC_LIST(oc_blockwise_responses);
 
 #ifdef OC_APP_DATA_BUFFER_POOL
-typedef 
-        struct
-  oc_app_data_buffer_t{
-  uint8_t buffer
-          [OC_APP_DATA_BUFFER_SIZE];
+typedef struct oc_app_data_buffer_t
+{
+  uint8_t buffer[OC_APP_DATA_BUFFER_SIZE];
 } oc_app_data_buffer_t;
 OC_MEMB_STATIC(oc_app_data_s, oc_app_data_buffer_t, OC_APP_DATA_BUFFER_POOL);
 #endif /* OC_APP_DATA_BUFFER_POOL */
